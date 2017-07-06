@@ -285,13 +285,14 @@
 		\begin{tikzpicture}[node distance=1.5cm]
 			\only<1-2> {
 					
+				
 			    %root
 			    \draw node (0) [little node, fill=black] {};
 			    %first line
 			    \draw (-3,\y) node (1) [little node] {}; 
 			    \draw (3, \y) node (2) [little node] {};
-			    \draw (0) -- (1) node [sloped,above, pos=0.5] {};
-			    \draw (0) -- (2) node [sloped,above, pos=0.5] {};
+			    \draw (0) -- (1) node [sloped,above, pos=0.5] {3};
+			    \draw (0) -- (2) node [sloped,above, pos=0.5] {11};
 			    %second line
 			    \draw (-4.5,\z) node (3) [little node] {};
 			    \draw (-3.2,\z) node (4) [little node] {};
@@ -328,6 +329,9 @@
 	 		    \draw (6) -- (16) node [sloped,above, pos=0.5] {1};
 	 		    \draw (7) -- (17) node [sloped,above, pos=0.5] {3};
 	 		    \draw (7) -- (18) node [sloped,above, pos=0.5] {7};
+	 		    %u,v	
+	 		    \draw[color=white] (0) +(155:0.5cm) node (u) {u};
+	 		    \draw[color=white] (13) +(10:0.5cm) node (v) {v};	
  		    }
  	    \only<3>{
  	    				
@@ -428,18 +432,87 @@
 		\end{tikzpicture}
 	\end{figure}
 \end{frame}
-\begin{frame}{STPM-Problem $	\rightsquigarrow$ TPM-Problem}
-	
+\begin{frame}{MST-Verification $	\rightsquigarrow$ TPM-Problem}
+	\begin{itemize}
+		\item Graph $G=(V,E)$ and spanning tree $T$
+		\item Is $T$ a MST? 
+		\item [$\Leftrightarrow$] Check all non-tree edges $\{u,v\}$ against heaviest edge on $(u,v)$-path
+		
+		\bigskip
+		\pause
+		\item [$\Rightarrow$] Reduce to TPM-Problem with 
+		\begin{itemize}
+			\item tree $T$
+			\item List $L$ of queries $(u_i,v_i)$ and $|L| \le m$
+		\end{itemize}
+	\end{itemize}
 \end{frame}
-\begin{frame}
+\begin{frame}{TPM-Problem $	\rightsquigarrow$ STPM-Problem}
+	\begin{block}{Full-Branching Tree}
+		Need {\color{blue} full-branching tree} with identical heaviest edge on each $(u_i,v_i)$-path
+	\end{block}
+	\begin{itemize}
+		\item Boruvka-like construction of such f-b-tree $T'$
+		\begin{itemize}
+			\item with $|T'| \le 2|T|$
+			\item in $\mathcal{O}(|T|)$ time
+		\end{itemize}
+	\end{itemize}
+	\bigskip
+	\pause
+	\begin{block}{Monotone path queries}
+		SPTM only allows monotone queries $(u_i,v_i)$, i.e. $u_i$ ancestor of $v_i$.
+	\end{block}
+	\begin{itemize}
+	\item Split up $(u_i,v_i)$-path into 2 monotone path $(u_i,z), (z, v_i)$,  \\ $z = \textup{{\color{blue}L}owest{\color{blue}C}ommon{\color{blue}A}ncestor}(u_i,v_i)$
+	\item $LCA(u_i,v_i)$: $\mathcal{O}(|T|)$ preprocessing time, query in constant time
+	\end{itemize}
+\end{frame}
+\begin{frame}{Algorithm for solving STPM}
+
+	\begin{block}{STPM}
+	 \begin{itemize}
+	 	\item full-branching tree $T$
+	 	\item List of $m$ monotone paths $(u_i,v_i)$
+	 \end{itemize}
+ 	Determine heaviest edge on each given path.
+	\end{block}
+	\bigskip
+	\pause
+	\begin{overprint}
+		\onslide<1-2>
+	\begin{itemize}
+	\item  Several sets of vertices calculated by traversing $T$
+	\item  Algorithm uses special {\color{blue}set operator} $\downarrow$:
+	\[
+		A \downarrow B := \{ b \in B \ | \ \exists a \in A: a < b \textup{ and no } b'\in B \textup{ with } a < b' < b \} 
+	\]
+	\item Informally: Each $a \in A$ 'picks' next larger $b \in B$ 
+	\end{itemize}
+	\onslide<3>
+	\begin{itemize}
+		\item  Several sets of vertices calculated by traversing $T$
+		\item  Algorithm uses special {\color{blue}set operator} $\downarrow$:
+		\[
+		A \downarrow B := \{ b \in B \ | \ \exists a \in A: a < b \textup{ and no } b'\in B \textup{ with } a < b' < b \} 
+		\]
+		\item $A = \{1,3,6\}, \ B = \{1,2,3,4,5,6\}: \ \ A \downarrow B = \{2,4\}$ 
+	\end{itemize}
+	\end{overprint}
+\end{frame}
+\begin{frame}{Algorithm for solving STPM}
+	For all vertices $w$ of $T$ \\
 	\textbf{Set of vertices}
 		\begin{itemize}
 			\item $L_w = \{\textup{vertices }u_i \textup{ for which } v_i = w\}$ 
 		\end{itemize}
+	\pause
 	\textbf{Sets of vertex depths}
 	\begin{itemize}
 		\item $D_w = \{d(u_i) | u_i \textup{ is ancestor, } v_i \textup{ descendant of } w\}$
+		\pause
 		\item $M_w$ set of depth of suffix weight maxima on $(r,v)$-path:
+		\pause
 		\[
 			M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_v(j)) > \omega(P_v(k)), k = j+1, \dots, d(w)\}
 		\]
@@ -448,16 +521,686 @@
 	\end{itemize}
 	
 \end{frame}
-\begin{frame}{STMP-Problem}
+\begin{frame}
+	\begin{figure}
+		\centering
+		\def\a{-0.5 cm}
+		\def\h{-0.6 cm}
+		\def\b{-1.6cm}
+		\def\c{-2.8cm}
+		\def\d{-3.45cm}
+		\def\leftdist{-7cm}
+		\def\rightdist{0cm}
+		\begin{tikzpicture}[node distance=1.5cm]
+		\begin{overprint}
+		\only<1>{
+			%root
+			\draw node (base) {};
+			\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+			\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+			\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+			
+			\draw (0) +(2cm,\h) node (8) [little node] {};
+			\draw (8) +(-0.8,\h) node (9) [little node] {};
+			\draw (8) +(0.8,\h) node (10) [little node] {};
+			\draw (9) +(-0.6,\h) node (11)  {$\dots$};
+			\draw (9) +(0.45,\h) node (12)  {$\dots$};
+			\draw (10) +(-0.4,\h) node (13)  {$\dots$};
+			\draw (10) +(0.6,\h) node (14)  {$\dots$};
+			\draw (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+			\draw (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+			\draw (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+			\draw (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+			\draw (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+			\draw (6) ++(+0.4cm,\h) node (20)  [little node] {};
+			
+			%additional edges
+			\draw (0) -- (8) node [sloped,above,pos=0.5] {{\footnotesize 4}};
+			\draw (8) -- (9) node [sloped,above,pos=0.7] {{\footnotesize 2}};
+			\draw (8) -- (10) node [sloped,above,pos=0.5] {{\footnotesize 9}};
+			\draw (9) -- (11) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (9) -- (12) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (10) -- (13) node [sloped,above,pos=0.5] {{\footnotesize 6}};
+			\draw (10) -- (14) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+			
+			\draw (1) -- (15) node [sloped,above,pos=0.7] {{\footnotesize 5}};
+			\draw (2) -- (16) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+			\draw (3) -- (17) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (4) -- (18) node [sloped,above,pos=0.5] {{\footnotesize 4}};
+			\draw (5) -- (19) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (6) -- (20) node [sloped,above,pos=0.5] {{\footnotesize 9}};
+			
+			% Gitter
+			\draw[opacity=0] (0) +(\leftdist,0) node (0l) {0};
+			\draw[opacity=0] (0) +(\rightdist,0) node (0r) {};
+			\draw[opacity=0] (0) +(\leftdist,\h) node (1l) {1};
+			\draw[opacity=0] (0) +(\rightdist,\h) node (1r) {};
+			\draw[opacity=0] (0) +(\leftdist,2*\h) node (2l) {2};
+			\draw[opacity=0] (0) +(\rightdist,2*\h) node (2r) {};
+			\draw[opacity=0] (0) +(\leftdist,3*\h) node (3l) {3};
+			\draw[opacity=0] (0) +(\rightdist,3*\h) node (3r) {};
+			\draw[opacity=0] (0) +(\leftdist,4*\h) node (4l) {4};
+			\draw[opacity=0] (0) +(\rightdist,4*\h) node (4r) {};
+			\draw[opacity=0] (0) +(\leftdist,5*\h) node (5l) {5};
+			\draw[opacity=0] (0) +(\rightdist,5*\h) node (5r) {};
+			\draw[opacity=0] (0) +(\leftdist,6*\h) node (6l) {6};
+			\draw[opacity=0] (0) +(\rightdist,6*\h) node (6r) {};
+			\draw[opacity=0] (0) +(\leftdist,7*\h) node (7l) {7};
+			\draw[opacity=0] (0) +(\rightdist,7*\h) node (7r) {};
+			
+			%depth
+			%\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+			%{
+			%	\begin{pgfonlayer}{bg}    % select the background layer
+			%	\draw[dashed, color=gray, opacity=0.5] (\x) -- (\z); 
+			%	\end{pgfonlayer}
+			%}
+			
+			
+			%edges
+			\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+			\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+			\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+			\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+			\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			
+			
+			
+			%u_i,v_i
+			\draw[opacity=0] (1) +(-0.8cm,0.2cm) node  {$u_1, u_3$};
+			\draw[opacity=0] (3) +(-0.6cm,0.2cm) node  {$u_2$};
+			\draw[opacity=0] (6) +(-0.6,0.2cm) node  {$v_1,v_2$};
+			\draw[opacity=0] (7) +(-0.6,0cm) node  {$v_3$};
+			%\draw[dashed, color=gray] (0l) -- (0r);
+			
+			% L-set
+				\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+			\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+			
+		}	
+		
+		
+		% ##########################2###############################
+		
+		\only<2> {
+			%root
+			\draw node (base) {};
+			\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+			\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+			\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+			
+			\draw (0) +(2cm,\h) node (8) [little node] {};
+			\draw (8) +(-0.8,\h) node (9) [little node] {};
+			\draw (8) +(0.8,\h) node (10) [little node] {};
+			\draw (9) +(-0.6,\h) node (11)  {$\dots$};
+			\draw (9) +(0.45,\h) node (12)  {$\dots$};
+			\draw (10) +(-0.4,\h) node (13)  {$\dots$};
+			\draw (10) +(0.6,\h) node (14)  {$\dots$};
+			\draw (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+			\draw (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+			\draw (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+			\draw (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+			\draw (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+			\draw (6) ++(+0.4cm,\h) node (20)  [little node] {};
+			
+			%additional edges
+			\draw (0) -- (8) node [sloped,above,pos=0.5] {{\footnotesize 4}};
+			\draw (8) -- (9) node [sloped,above,pos=0.7] {{\footnotesize 2}};
+			\draw (8) -- (10) node [sloped,above,pos=0.5] {{\footnotesize 9}};
+			\draw (9) -- (11) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (9) -- (12) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (10) -- (13) node [sloped,above,pos=0.5] {{\footnotesize 6}};
+			\draw (10) -- (14) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+			
+			\draw (1) -- (15) node [sloped,above,pos=0.7] {{\footnotesize 5}};
+			\draw (2) -- (16) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+			\draw (3) -- (17) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (4) -- (18) node [sloped,above,pos=0.5] {{\footnotesize 4}};
+			\draw (5) -- (19) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (6) -- (20) node [sloped,above,pos=0.5] {{\footnotesize 9}};
+			
+			% Gitter
+			\draw[opacity=0] (0) +(\leftdist,0) node (0l) {0};
+			\draw[opacity=0] (0) +(\rightdist,0) node (0r) {};
+			\draw[opacity=0] (0) +(\leftdist,\h) node (1l) {1};
+			\draw[opacity=0] (0) +(\rightdist,\h) node (1r) {};
+			\draw[opacity=0] (0) +(\leftdist,2*\h) node (2l) {2};
+			\draw[opacity=0] (0) +(\rightdist,2*\h) node (2r) {};
+			\draw[opacity=0] (0) +(\leftdist,3*\h) node (3l) {3};
+			\draw[opacity=0] (0) +(\rightdist,3*\h) node (3r) {};
+			\draw[opacity=0] (0) +(\leftdist,4*\h) node (4l) {4};
+			\draw[opacity=0] (0) +(\rightdist,4*\h) node (4r) {};
+			\draw[opacity=0] (0) +(\leftdist,5*\h) node (5l) {5};
+			\draw[opacity=0] (0) +(\rightdist,5*\h) node (5r) {};
+			\draw[opacity=0] (0) +(\leftdist,6*\h) node (6l) {6};
+			\draw[opacity=0] (0) +(\rightdist,6*\h) node (6r) {};
+			\draw[opacity=0] (0) +(\leftdist,7*\h) node (7l) {7};
+			\draw[opacity=0] (0) +(\rightdist,7*\h) node (7r) {};
+			
+			%depth
+			\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+			{
+				\begin{pgfonlayer}{bg}    % select the background layer
+				\draw[dashed, color=gray, opacity=0.0] (\x) -- (\z); 
+				\end{pgfonlayer}
+			}
+			
+			
+			%edges
+			\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+			\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+			\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+			\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+			\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			
+			
+			
+			%u_i,v_i
+			%u_i,v_i
+			\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+			\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+			\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+			\draw (7) +(-0.6,0cm) node {$v_3$};
+			%\draw[dashed, color=gray] (0l) -- (0r);
+			
+			% L-set
+			\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+		\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+			
+		}
+	
+	    % '#######################################3##################
+		\only<3> {
+			%root
+			\draw node (base) {};
+			\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+			\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+			\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+			
+			\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
+			\draw[opacity=0] (8) +(-0.8,\h) node (9) [little node] {};
+			\draw[opacity=0] (8) +(0.8,\h) node (10) [little node] {};
+			\draw[opacity=0] (9) +(-0.6,\h) node (11)  {$\dots$};
+			\draw[opacity=0] (9) +(0.45,\h) node (12)  {$\dots$};
+			\draw[opacity=0] (10) +(-0.4,\h) node (13)  {$\dots$};
+			\draw[opacity=0] (10) +(0.6,\h) node (14)  {$\dots$};
+			\draw[opacity=0] (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+			\draw[opacity=0] (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+			\draw[opacity=0] (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+			\draw[opacity=0] (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+			\draw[opacity=0] (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+			\draw[opacity=0] (6) ++(+0.4cm,\h) node (20)  [little node] {};
+			
+			%additional edges
+		
+			
+			% Gitter
+			\draw[opacity=0] (0) +(\leftdist,0) node (0l) {0};
+			\draw[opacity=0] (0) +(\rightdist,0) node (0r) {};
+			\draw[opacity=0] (0) +(\leftdist,\h) node (1l) {1};
+			\draw[opacity=0] (0) +(\rightdist,\h) node (1r) {};
+			\draw[opacity=0] (0) +(\leftdist,2*\h) node (2l) {2};
+			\draw[opacity=0] (0) +(\rightdist,2*\h) node (2r) {};
+			\draw[opacity=0] (0) +(\leftdist,3*\h) node (3l) {3};
+			\draw[opacity=0] (0) +(\rightdist,3*\h) node (3r) {};
+			\draw[opacity=0] (0) +(\leftdist,4*\h) node (4l) {4};
+			\draw[opacity=0] (0) +(\rightdist,4*\h) node (4r) {};
+			\draw[opacity=0] (0) +(\leftdist,5*\h) node (5l) {5};
+			\draw[opacity=0] (0) +(\rightdist,5*\h) node (5r) {};
+			\draw[opacity=0] (0) +(\leftdist,6*\h) node (6l) {6};
+			\draw[opacity=0] (0) +(\rightdist,6*\h) node (6r) {};
+			\draw[opacity=0] (0) +(\leftdist,7*\h) node (7l) {7};
+			\draw[opacity=0] (0) +(\rightdist,7*\h) node (7r) {};
+			
+			%depth
+			\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+			{
+				\begin{pgfonlayer}{bg}    % select the background layer
+				\draw[dashed, color=gray, opacity=0.0] (\x) -- (\z); 
+				\end{pgfonlayer}
+			}
+			
+			
+			%edges
+			\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+			\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+			\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+			\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+			\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+			\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+			
+			
+			
+			%u_i,v_i
+			%u_i,v_i
+			\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+			\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+			\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+			\draw (7) +(-0.6,0cm) node {$v_3$};
+			%\draw[dashed, color=gray] (0l) -- (0r);
+			
+			% L-set
+				\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+			\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+		}
+	
+	    % '#######################################4##################
+	    \only<4-> {
+	    	%root
+	    	\draw node (base) {};
+	    	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+	    	\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+	    	\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+	    	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+	    	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+	    	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+	    	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+	    	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+	    	
+	    	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
+	    	\draw[opacity=0] (8) +(-0.8,\h) node (9) [little node] {};
+	    	\draw[opacity=0] (8) +(0.8,\h) node (10) [little node] {};
+	    	\draw[opacity=0] (9) +(-0.6,\h) node (11)  {$\dots$};
+	    	\draw[opacity=0] (9) +(0.45,\h) node (12)  {$\dots$};
+	    	\draw[opacity=0] (10) +(-0.4,\h) node (13)  {$\dots$};
+	    	\draw[opacity=0] (10) +(0.6,\h) node (14)  {$\dots$};
+	    	\draw[opacity=0] (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+	    	\draw[opacity=0] (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+	    	\draw[opacity=0] (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+	    	\draw[opacity=0] (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+	    	\draw[opacity=0] (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+	    	\draw[opacity=0] (6) ++(+0.4cm,\h) node (20)  [little node] {};
+	    	
+	    	%additional edges
+	    	
+	    	
+	    	% Gitter
+	    	\draw (0) +(\leftdist,0) node (0l) {0};
+	    	\draw (0) +(\rightdist,0) node (0r) {};
+	    	\draw (0) +(\leftdist,\h) node (1l) {1};
+	    	\draw (0) +(\rightdist,\h) node (1r) {};
+	    	\draw (0) +(\leftdist,2*\h) node (2l) {2};
+	    	\draw (0) +(\rightdist,2*\h) node (2r) {};
+	    	\draw (0) +(\leftdist,3*\h) node (3l) {3};
+	    	\draw (0) +(\rightdist,3*\h) node (3r) {};
+	    	\draw (0) +(\leftdist,4*\h) node (4l) {4};
+	    	\draw (0) +(\rightdist,4*\h) node (4r) {};
+	    	\draw (0) +(\leftdist,5*\h) node (5l) {5};
+	    	\draw (0) +(\rightdist,5*\h) node (5r) {};
+	    	\draw (0) +(\leftdist,6*\h) node (6l) {6};
+	    	\draw (0) +(\rightdist,6*\h) node (6r) {};
+	    	\draw (0) +(\leftdist,7*\h) node (7l) {7};
+	    	\draw (0) +(\rightdist,7*\h) node (7r) {};
+	    	
+	    	%depth
+	    	\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+	    	{
+	    		\begin{pgfonlayer}{bg}    % select the background layer
+	    		\draw[dashed, color=gray, opacity=.5] (\x) -- (\z); 
+	    		\end{pgfonlayer}
+	    	}
+	    	
+	    	
+	    	%edges
+	    	\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+	    	\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+	    	\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+	    	\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+	    	\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+	    	\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+	    	\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+	    	
+	    	
+	    	
+	    	%u_i,v_i
+	    	%u_i,v_i
+	    	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+	    	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+	    	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+	    	\draw (7) +(-0.6,0cm) node {$v_3$};
+	    	%\draw[dashed, color=gray] (0l) -- (0r);
+	    	
+	    	% L-set
+	    	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+	    	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+	    	
+	    }
+        \only<6-7> {
+        	%root
+        	\draw node (base) {};
+        	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+        	\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+        	\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+        	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+        	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+        	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+        	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+        	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+        	
+        	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
+        	\draw[opacity=0] (8) +(-0.8,\h) node (9) [little node] {};
+        	\draw[opacity=0] (8) +(0.8,\h) node (10) [little node] {};
+        	\draw[opacity=0] (9) +(-0.6,\h) node (11)  {$\dots$};
+        	\draw[opacity=0] (9) +(0.45,\h) node (12)  {$\dots$};
+        	\draw[opacity=0] (10) +(-0.4,\h) node (13)  {$\dots$};
+        	\draw[opacity=0] (10) +(0.6,\h) node (14)  {$\dots$};
+        	\draw[opacity=0] (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+        	\draw[opacity=0] (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+        	\draw[opacity=0] (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+        	\draw[opacity=0] (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+        	\draw[opacity=0] (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+        	\draw[opacity=0] (6) ++(+0.4cm,\h) node (20)  [little node] {};
+        	
+        	%additional edges
+        	
+        	
+        	% Gitter
+        	\draw (0) +(\leftdist,0) node (0l) {0};
+        	\draw (0) +(\rightdist,0) node (0r) {};
+        	\draw (0) +(\leftdist,\h) node (1l) {1};
+        	\draw (0) +(\rightdist,\h) node (1r) {};
+        	\draw (0) +(\leftdist,2*\h) node (2l) {2};
+        	\draw (0) +(\rightdist,2*\h) node (2r) {};
+        	\draw (0) +(\leftdist,3*\h) node (3l) {3};
+        	\draw (0) +(\rightdist,3*\h) node (3r) {};
+        	\draw (0) +(\leftdist,4*\h) node (4l) {4};
+        	\draw (0) +(\rightdist,4*\h) node (4r) {};
+        	\draw (0) +(\leftdist,5*\h) node (5l) {5};
+        	\draw (0) +(\rightdist,5*\h) node (5r) {};
+        	\draw (0) +(\leftdist,6*\h) node (6l) {6};
+        	\draw (0) +(\rightdist,6*\h) node (6r) {};
+        	\draw (0) +(\leftdist,7*\h) node (7l) {7};
+        	\draw (0) +(\rightdist,7*\h) node (7r) {};
+        	
+        	%depth
+        	\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+        	{
+        		\begin{pgfonlayer}{bg}    % select the background layer
+        		\draw[dashed, color=gray, opacity=.1] (\x) -- (\z); 
+        		\end{pgfonlayer}
+        	}
+        	
+        	
+        	%edges
+        	\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+        	\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+        	\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+        	\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+        	\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+        	\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	
+        	
+        	
+        	%u_i,v_i
+        	%u_i,v_i
+        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	%\draw[dashed, color=gray] (0l) -- (0r);
+        	
+        	% L-set
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+        	
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}$}};
+        	
+        }
+        \only<8-9> {
+        	%root
+        	\draw node (base) {};
+        	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+        	\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+        	\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+        	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+        	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+        	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+        	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+        	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+        	
+        	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
+        	\draw[opacity=0] (8) +(-0.8,\h) node (9) [little node] {};
+        	\draw[opacity=0] (8) +(0.8,\h) node (10) [little node] {};
+        	\draw[opacity=0] (9) +(-0.6,\h) node (11)  {$\dots$};
+        	\draw[opacity=0] (9) +(0.45,\h) node (12)  {$\dots$};
+        	\draw[opacity=0] (10) +(-0.4,\h) node (13)  {$\dots$};
+        	\draw[opacity=0] (10) +(0.6,\h) node (14)  {$\dots$};
+        	\draw[opacity=0] (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+        	\draw[opacity=0] (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+        	\draw[opacity=0] (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+        	\draw[opacity=0] (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+        	\draw[opacity=0] (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+        	\draw[opacity=0] (6) ++(+0.4cm,\h) node (20)  [little node] {};
+        	
+        	%additional edges
+        	
+        	
+        	% Gitter
+        	\draw (0) +(\leftdist,0) node (0l) {0};
+        	\draw (0) +(\rightdist,0) node (0r) {};
+        	\draw (0) +(\leftdist,\h) node (1l) {1};
+        	\draw (0) +(\rightdist,\h) node (1r) {};
+        	\draw (0) +(\leftdist,2*\h) node (2l) {2};
+        	\draw (0) +(\rightdist,2*\h) node (2r) {};
+        	\draw (0) +(\leftdist,3*\h) node (3l) {3};
+        	\draw (0) +(\rightdist,3*\h) node (3r) {};
+        	\draw (0) +(\leftdist,4*\h) node (4l) {4};
+        	\draw (0) +(\rightdist,4*\h) node (4r) {};
+        	\draw (0) +(\leftdist,5*\h) node (5l) {5};
+        	\draw (0) +(\rightdist,5*\h) node (5r) {};
+        	\draw (0) +(\leftdist,6*\h) node (6l) {6};
+        	\draw (0) +(\rightdist,6*\h) node (6r) {};
+        	\draw (0) +(\leftdist,7*\h) node (7l) {7};
+        	\draw (0) +(\rightdist,7*\h) node (7r) {};
+        	
+        	%depth
+        	\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+        	{
+        		\begin{pgfonlayer}{bg}    % select the background layer
+        		\draw[dashed, color=gray, opacity=.1] (\x) -- (\z); 
+        		\end{pgfonlayer}
+        	}
+        	
+        	
+        	%edges
+        	\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+        	\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+        	\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+        	\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+        	\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+        	\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	
+        	
+        	
+        	%u_i,v_i
+        	%u_i,v_i
+        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	%\draw[dashed, color=gray] (0l) -- (0r);
+        	
+        	% L-set
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+        	
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{3\}, D = \{1,3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}, D = \{1\}$}};
+        	
+        }
+        \only<10-> {
+        	%root
+        	\draw node (base) {};
+        	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
+        	\draw (0) ++(-1.5cm,\h) node (1) [little node]  {};
+        	\draw (1) ++(-1.2cm,\h) node (2) [little node]  {};
+        	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
+        	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
+        	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
+        	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+        	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
+        	
+        	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
+        	\draw[opacity=0] (8) +(-0.8,\h) node (9) [little node] {};
+        	\draw[opacity=0] (8) +(0.8,\h) node (10) [little node] {};
+        	\draw[opacity=0] (9) +(-0.6,\h) node (11)  {$\dots$};
+        	\draw[opacity=0] (9) +(0.45,\h) node (12)  {$\dots$};
+        	\draw[opacity=0] (10) +(-0.4,\h) node (13)  {$\dots$};
+        	\draw[opacity=0] (10) +(0.6,\h) node (14)  {$\dots$};
+        	\draw[opacity=0] (1) ++(+1.2cm,\h) node (15)  {$\dots$};
+        	\draw[opacity=0] (2) ++(+0.8cm,\h) node (16)   {$\dots$};
+        	\draw[opacity=0] (3) ++(+0.7cm,\h) node (17)   {$\dots$};
+        	\draw[opacity=0] (4) ++(+0.6cm,\h) node (18)   {$\dots$};
+        	\draw[opacity=0] (5) ++(+0.5cm,\h) node (19)   {$\dots$};
+        	\draw[opacity=0] (6) ++(+0.4cm,\h) node (20)  [little node] {};
+        	
+        	%additional edges
+        	
+        	
+        	% Gitter
+        	\draw (0) +(\leftdist,0) node (0l) {0};
+        	\draw (0) +(\rightdist,0) node (0r) {};
+        	\draw (0) +(\leftdist,\h) node (1l) {1};
+        	\draw (0) +(\rightdist,\h) node (1r) {};
+        	\draw (0) +(\leftdist,2*\h) node (2l) {2};
+        	\draw (0) +(\rightdist,2*\h) node (2r) {};
+        	\draw (0) +(\leftdist,3*\h) node (3l) {3};
+        	\draw (0) +(\rightdist,3*\h) node (3r) {};
+        	\draw (0) +(\leftdist,4*\h) node (4l) {4};
+        	\draw (0) +(\rightdist,4*\h) node (4r) {};
+        	\draw (0) +(\leftdist,5*\h) node (5l) {5};
+        	\draw (0) +(\rightdist,5*\h) node (5r) {};
+        	\draw (0) +(\leftdist,6*\h) node (6l) {6};
+        	\draw (0) +(\rightdist,6*\h) node (6r) {};
+        	\draw (0) +(\leftdist,7*\h) node (7l) {7};
+        	\draw (0) +(\rightdist,7*\h) node (7r) {};
+        	
+        	%depth
+        	\foreach \x/\y/\z in {0l/0r/0,1l/1r/1,2l/2r/2,3l/3r/3,4l/4r/4,5l/5r/5,6l/6r/6,7l/7r/7}
+        	{
+        		\begin{pgfonlayer}{bg}    % select the background layer
+        		\draw[dashed, color=gray, opacity=.1] (\x) -- (\z); 
+        		\end{pgfonlayer}
+        	}
+        	
+        	
+        	%edges
+        	\draw (0) -- (1) node [sloped,above,pos=0.5] {{\footnotesize 2}};
+        	\draw (1) -- (2) node [sloped,above,pos=0.7] {{\footnotesize 4}};
+        	\draw (2) -- (3) node [sloped,above,pos=0.5] {{\footnotesize 7}};
+        	\draw (3) -- (4) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	\draw (4) -- (5) node [sloped,above,pos=0.5] {{\footnotesize 1}};
+        	\draw (5) -- (6) node [sloped,above,pos=0.5] {{\footnotesize 3}};
+        	\draw (6) -- (7) node [sloped,above,pos=0.5] {{\footnotesize 5}};
+        	
+        	
+        	
+        	%u_i,v_i
+        	%u_i,v_i
+        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	%\draw[dashed, color=gray] (0l) -- (0r);
+        	
+        	% L-set
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
+        	
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.4,opacity=1,color=black] {{\footnotesize$L = \{3\}, D = \{1\}, M = \{3, 7\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.4,opacity=1,color=black] {{\footnotesize$L = \{1,2\},D = \{1,3\}, M = \{3,4,6\}$}};
+        	
+        }
+			
+		\end{overprint}
+		\end{tikzpicture}
+	\end{figure}
+
+            \begin{overprint}
+            	\onslide<5-6>
+            	$\forall w \in T$
+            	\begin{itemize}
+            	\item $L_w = \{\textup{vertices }u_i \textup{ for which } v_i = w\}$
+            	\end{itemize}
+            	\onslide<7-8>
+           		 $\forall w \in T$
+           		 \begin{itemize}
+            		\item $D_w = \{d(u_i) | u_i \textup{ is ancestor, } v_i \textup{ descendant of } w\}$
+            	\end{itemize}
+                \onslide<9>
+                $\forall w \in T$
+                \begin{itemize}
+                	\item \[D_w = \{d(u_i) \ | v_i = w\} \cup \bigcup_{i \textup{ child of } w } D_i \setminus \{d(w)\}\]
+                \end{itemize}
+            	\onslide<10-11>
+            	$\forall w \in T$
+            	\begin{itemize}
+           		\item $M_w$ set of depth of suffix weight maxima on $(r,v)$-path:
+           		\[
+           		M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_v(j)) > \omega(P_v(k)), k = j+1, \dots, d(w)\}
+           		\]
+           		\end{itemize}
+           	    \onslide<12>
+           	    $\forall w \in T$
+           	    \begin{itemize}
+           	    	\item $M_w$ set of depth of suffix weight maxima on $(root,w)$-path:
+           	    	\item [] \ \ $\Rightarrow$ $\color{blue}\{d(v_i)\} \downarrow M_{v_i}$ \ : index of heaviest edge on path
+           	    \end{itemize}
+                \onslide<13>
+                $\forall w \in T$
+                \begin{itemize}
+                	\item Not known to compute $M_w$ efficiently
+                	\item Calculate $S_w = D_v \downarrow M_v$ instead \ \ \ ({\footnotesize since $\{d(v_i)\} \downarrow S_{v_i} = \{d(v{_i})\} \downarrow M_{v_i}$})
+                \end{itemize}
+            	 \onslide<14>
+            	$\forall w \in T$
+            	\begin{itemize}
+            		\item $S_{root} = \emptyset$ and for $z$ ancestor of $w$:
+            		\item $\color{blue} S_w$ computed by binary search on $\color{blue} D_w \downarrow S_z$ and const. number of set operations
+            	\end{itemize}
+            \end{overprint}
+		
+\end{frame}
+\begin{frame}{Algorithm}
     \begin{minipage}[t]{0.49\textwidth}
     	
-    	Für alle Knoten $w \in V$
+    	For each vertex $w$ (time per vertex)
     	\begin{itemize}
-    		\item Bestimme $L_w$
-    		\item Berechne $D_w$ rekursiv:
-    		\[D_w = \{d(u_i) | v_i = w\} \cup \ \bigcup_{i \textup{ child of } w } D_{i} \setminus \{d(w)\}\]
-    		\item $M_w$: set of depth of suffix weight maxima on $(r,v)$-path
-    		\item $S_w = \{d(w)\} \downarrow M_w$
+    		\item Calculate $L_w$   \ \ ($\color{blue}\mathcal{O}(1)$)
+    		\item Calculate $D_w$ bottom-up \ \ ($\color{blue}\mathcal{O}(1)$
+    		\item Calculate $S_w = D_w \downarrow M_v$ top-down  \ \ ($\color{blue}\mathcal{O}(\log|D_w| + 1)$)
+    		\item Calculate for each $i \in L_w$: \\
+    			  $\{d(u_i)\} \downarrow S_w$ \ \ ($\color{blue} \mathcal{O}(|L_w|)$)
+    		
+    	\end{itemize}
+   		 \bigskip
+   		We have
+    	\begin{itemize}
+    		\item $\footnotesize \sum_{w} \log (|D_w| + 1) = \mathcal{O}(n + m)$
+    		\item [$\Rightarrow$] Overall running time in $\mathcal{O}(n + m)$
     	\end{itemize}
     \end{minipage}
     \begin{minipage}[t]{0.49\textwidth}
@@ -537,9 +1280,8 @@
     		
     			% L-set
     			
-    			\draw [dashed, color=gray, opacity=.5] (7r) -- (7) node [sloped,below,pos=0.5,opacity=1,color=black] {{\footnotesize$L = \{3\}$}};
     			\draw [dashed, color=gray, opacity=.5] (6r) -- (6) node [sloped,above,pos=0.45,opacity=1,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\}$}};
-   				\draw [dashed, color=gray, opacity=.5] (6r) -- (6) node [sloped,below,pos=0.45,opacity=1,color=black] {{\footnotesize$M = \{3,7\}$}};
+   				\draw [dashed, color=gray, opacity=.5] (6r) -- (6) node [sloped,below,pos=0.45,opacity=1,color=black] {{\footnotesize$M = \{3,4,6\}$}};
     			%first line
     		}
     		\end{tikzpicture}
