@@ -32,7 +32,7 @@
 % *.eps format if you use latex+dvips+ps2pdf, 
 % *.jpg/*.png/*.pdf if you use pdflatex)
 
-\titleimage{graph}
+\titleimage{titelbild}
 
 %% TITLE LOGO
 
@@ -158,7 +158,7 @@
 
 % the presentation starts here
 
-\title[Linear-Time Algorithm for Verifiying MST]{Linear-Time-Algorithm for Verifying Minimal Spanning Trees}
+\title[Linear-Time Algorithm for Verifiying MST]{Linear-Time-Algorithm for Verifying Minimum Spanning Trees}
 \author{Matthias Schimek}
 
 \institute{Institute of Theoretical Informatics}
@@ -187,10 +187,7 @@
 	\emph{Given:} undirected Graph $G=(V,E)$, edge weights $\omega: E \rightarrow \mathbb{R}$ and spanning tree $T$ of $G$.
 	\emph{Decide} whether $T$ is a MST of $G$.
 	\end{block}
-	\pause
-	\begin{itemize}
-		\item various applications ...
-	\end{itemize}
+	\bigskip
 	\pause
 	\begin{block}{MST - Characterization}
 		\centering{ $T$ is an $MST$ \\ $\Leftrightarrow$ \\
@@ -213,18 +210,20 @@
  		\centering
  		\begin{tikzpicture}[node distance=1.5cm]
  	%	\begin{scope}
- 		\node (1) [big node] {1};
- 		\node (2) [big node, left of =1] {2};
- 		\node (3) [big node, below left of =2] {3};
- 		\node (4) [big node, above left of =2] {4};
- 		\node (5) [big node, left of =3] {$u$};
- 		\node (6) [big node, below left of =3] {6};
- 		\node (7) [big node, below right of =1] {7};
- 		\node (8) [big node, below right of =7] {8};
- 		\node (9) [big node, above right of =1] {9};
- 		\node (10)[big node, right of =9] {$v$};
- 		\node (11) [big node,below left of =1] {11};
- 		%\path (4) node (9) [big node] at +(-15:1.4) {};
+ 		\node (1) [little node] {};
+ 		\node (2) [little node, left of =1] {};
+ 		\node (3) [little node, below left of =2] {};
+ 		\node (4) [little node, above left of =2] {};
+ 		\node (5) [little node, left of =3] {};
+ 		\draw (5) +(150:0.5) node {$u$};
+ 		\node (6) [little node, below left of =3] {};
+ 		\node (7) [little node, below right of =1] {};
+ 		\node (8) [little node, below right of =7] {};
+ 		\node (9) [little node, above right of =1] {};
+ 		\node (10)[little node, right of =9] {};
+ 		\draw (10) +(30:0.5) node {$v$};
+ 		\node (11) [little node,below left of =1] {};
+ 		%\path (4) node (9) [little node] at +(-15:1.4) {};
  		
  		\only<1> {
  		\draw (11) -- (2) node[sloped,above,pos=0.5] {3};
@@ -452,7 +451,7 @@
 		Need {\color{blue} full-branching tree} with identical heaviest edge on each $(u_i,v_i)$-path
 	\end{block}
 	\begin{itemize}
-		\item Boruvka-like construction of such f-b-tree $T'$
+		\item Boruvka-like construction of such a full-branching tree $T'$
 		\begin{itemize}
 			\item with $|T'| \le 2|T|$
 			\item in $\mathcal{O}(|T|)$ time
@@ -461,7 +460,7 @@
 	\bigskip
 	\pause
 	\begin{block}{Monotone path queries}
-		SPTM only allows monotone queries $(u_i,v_i)$, i.e. $u_i$ ancestor of $v_i$.
+		SPTM only allows queries $(u_i,v_i)$ with $u_i$ ancestor of $v_i$.
 	\end{block}
 	\begin{itemize}
 	\item Split up $(u_i,v_i)$-path into 2 monotone path $(u_i,z), (z, v_i)$,  \\ $z = \textup{{\color{blue}L}owest{\color{blue}C}ommon{\color{blue}A}ncestor}(u_i,v_i)$
@@ -499,27 +498,6 @@
 		\item $A = \{1,3,6\}, \ B = \{1,2,3,4,5,6\}: \ \ A \downarrow B = \{2,4\}$ 
 	\end{itemize}
 	\end{overprint}
-\end{frame}
-\begin{frame}{Algorithm for solving STPM}
-	For all vertices $w$ of $T$ \\
-	\textbf{Set of vertices}
-		\begin{itemize}
-			\item $L_w = \{\textup{vertices }u_i \textup{ for which } v_i = w\}$ 
-		\end{itemize}
-	\pause
-	\textbf{Sets of vertex depths}
-	\begin{itemize}
-		\item $D_w = \{d(u_i) | u_i \textup{ is ancestor, } v_i \textup{ descendant of } w\}$
-		\pause
-		\item $M_w$ set of depth of suffix weight maxima on $(r,v)$-path:
-		\pause
-		\[
-			M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_v(j)) > \omega(P_v(k)), k = j+1, \dots, d(w)\}
-		\]
-		
-		
-	\end{itemize}
-	
 \end{frame}
 \begin{frame}
 	\begin{figure}
@@ -711,10 +689,10 @@
 			
 			%u_i,v_i
 			%u_i,v_i
-			\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-			\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-			\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-			\draw (7) +(-0.6,0cm) node {$v_3$};
+			\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+			\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+			\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+			\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
 			%\draw[dashed, color=gray] (0l) -- (0r);
 			
 			% L-set
@@ -792,11 +770,10 @@
 			
 			
 			%u_i,v_i
-			%u_i,v_i
-			\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-			\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-			\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-			\draw (7) +(-0.6,0cm) node {$v_3$};
+			\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+			\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+			\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+			\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
 			%\draw[dashed, color=gray] (0l) -- (0r);
 			
 			% L-set
@@ -873,11 +850,10 @@
 	    	
 	    	
 	    	%u_i,v_i
-	    	%u_i,v_i
-	    	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-	    	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-	    	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-	    	\draw (7) +(-0.6,0cm) node {$v_3$};
+	    \draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+	    \draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+	    \draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+	    \draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
 	    	%\draw[dashed, color=gray] (0l) -- (0r);
 	    	
 	    	% L-set
@@ -953,18 +929,17 @@
         	
         	
         	%u_i,v_i
-        	%u_i,v_i
-        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
         	%\draw[dashed, color=gray] (0l) -- (0r);
         	
         	% L-set
         	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
         	
-        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}$}};
         	
         }
@@ -1036,19 +1011,18 @@
         	
         	
         	%u_i,v_i
-        	%u_i,v_i
-        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
         	%\draw[dashed, color=gray] (0l) -- (0r);
         	
         	% L-set
         	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
         	
-        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{3\}, D = \{1,3\}$}};
-        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}, D = \{1\}$}};
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.6,opacity=0,color=black] {{\footnotesize$L = \{3\}, D = \{1,3\}$}};
+        	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\}$}};
         	
         }
         \only<10-> {
@@ -1060,7 +1034,7 @@
         	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
         	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
         	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
-        	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+        	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=0.5]  {};
         	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
         	
         	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
@@ -1119,18 +1093,17 @@
         	
         	
         	%u_i,v_i
-        	%u_i,v_i
-        	\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-        	\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-        	\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-        	\draw (7) +(-0.6,0cm) node {$v_3$};
+        	\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+        	\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+        	\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+        	\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
         	%\draw[dashed, color=gray] (0l) -- (0r);
         	
         	% L-set
         	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.5,opacity=0,color=black] {{\footnotesize$L = \{3\}$}};
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
         	
-        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.4,opacity=1,color=black] {{\footnotesize$L = \{3\}, D = \{1\}, M = \{3, 7\}$}};
+        	\draw [dashed, color=gray, opacity=0] (7r) -- (7) node  [sloped,pos=0.4,opacity=0,color=black] {{\footnotesize$L = \{3\}, D = \{1\}, M = \{3, 7\}$}};
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.4,opacity=1,color=black] {{\footnotesize$L = \{1,2\},D = \{1,3\}, M = \{3,4,6\}$}};
         	
         }
@@ -1222,7 +1195,7 @@
     			\draw (3) ++(-0.4cm,\h) node (4) [little node]  {};
     			%\draw (4) ++(-0.35cm,\h) node (5) [little node]  {};
     			\draw (4) ++(-0.32cm,\h) node (5) [little node]  {};
-    			\draw (5) ++(-0.28cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+    			\draw (5) ++(-0.28cm,\h) node (6) [little node, fill=red]  {};
     			\draw (6) ++(-0.21cm,\h) node (7) [little node]  {};
     			%\draw (8) ++(-0.15cm,\h) node (9) [little node]  {};
     			%\draw (9) ++(-0.08cm,\h) node (10) [little node] {};
@@ -1271,10 +1244,10 @@
     			}
     		
     			%u_i,v_i
-    			\draw (1) +(-0.8cm,0.2cm) node {$u_1, u_3$};
-    			\draw (3) +(-0.6cm,0.2cm) node {$u_2$};
-    			\draw (6) +(-0.6,0.2cm) node {$v_1,v_2$};
-    			\draw (7) +(-0.6,0cm) node {$v_3$};
+    			\draw (1) +(-0.8cm,0.2cm) node [color=blue] {$u_1, u_3$};
+    			\draw (3) +(-0.6cm,0.2cm) node [color=blue] {$u_2$};
+    			\draw (6) +(-0.6,0.2cm) node [color=blue] {$v_1,v_2$};
+    			\draw (7) +(-0.6,0cm) node [color=blue] {$v_3$};
     			%\draw[dashed, color=gray] (0l) -- (0r);
     			
     		
@@ -1287,8 +1260,63 @@
     		\end{tikzpicture}
     	\end{figure}
     \end{minipage}
-    
-
+\end{frame}
+\begin{frame}{Realizing the set operations}
+	\begin{itemize}
+		\item Need constant execution time for {\color{blue}set operations}
+		\bigskip
+		\item $D_w, M_w, S_w$ contain only depths of vertices \\
+			 $\Rightarrow$ $D_w, M_w, S_w \subseteq \{0,...,h\} \ \rightsquigarrow$ {\color{blue} h-set}
+		\bigskip
+		\item $T$ is a full-branching tree $\Rightarrow$ $h \le \log n$. 
+		\bigskip
+		\item Assuming that machine word has $\color{blue} \log n$ bits: \\
+			  represent h-set $A$ as Integer $I$
+			  \[ I = \sum_{i\in A} 2^i \]
+		\item Try to realize set operations via bitwise operations
+		
+	\end{itemize}
+\end{frame}
+\begin{frame}{Realizing the set operations}
+	
+	\begin{tabular}[]{ l c l }
+		\textbf{Set expression} & \textbf{C equivalent} & \textbf{Comment} \\
+		$\emptyset$ & \texttt{0} & all bits cleared \\
+		$A \cup B$ & \texttt{A|B} & bitwise \texttt{OR} \\
+		$A \setminus B$ & \texttt{A\&\textasciitilde B}  & bitwise \texttt{AND}, complement \\
+		$\{j\}$ & \texttt{1 << j} & $2^j$, left shift of 1 \\
+		$\{i \in A \ | \ i < j \}$ & \texttt{A\&(1<<j)-1} & mask with bits $0,\dots,j-1$\\
+		$\{i\in A \ | \ i \ge j \} $ & \texttt{A\&\textasciitilde((1 << j)-1)}	& mask with bits $n,\dots,j$ \\
+		$A \downarrow B$ & \texttt{B\&(\textasciitilde(A|B)\^{}(A+(A|\textasciitilde B)))}
+	\end{tabular}
+ \end{frame}
+ \begin{frame}{Realizing the set operations}
+ 	Closer look at $A \downarrow B$ \ \ \ $\rightsquigarrow$ \ \ \  \texttt{B\&(\textasciitilde(A|B)\^{}(A+(A|\textasciitilde B)))} \\
+ 	\bigskip 
+ 	{\color{blue} \texttt{(A+(A|\textasciitilde B)}}
+ 	\begin{itemize}
+ 		\item $i \in A$ $\rightarrow$ \emph{carry-generate} position
+ 		\item $i \notin A,B$ $\rightarrow$ \emph{carry-propagate} position
+ 		\item $i \notin A, i \in B$ $\rightarrow$ \emph{carry-absorb} position
+ 		\item [$\Rightarrow$] $A \downarrow B$ are exactly elements $i \in B$ \ {\color{blue} 'receiving'} \ a carry
+ 	\end{itemize}
+ 	\bigskip
+ 	\pause
+    'Receiving' positions:
+    \begin{itemize}
+    	\item if \texttt{A}$[i] = $\ \texttt{(A|\textasciitilde B)}$[i]$ \ then \ \ \texttt{(A+(A|\textasciitilde B)}$[i] = 1$
+    	\item if \texttt{A}$[i] \neq$ \texttt{(A|\textasciitilde B)}$[i]$ \ then \ \ \texttt{(A+(A|\textasciitilde B)}$[i] = 0$
+    	\item [$\Rightarrow$] \texttt{XOR} (A+(A|\textasciitilde B)) with symmetric set difference of \texttt{(A|\textasciitilde B)} and \texttt{A}
+    	\item [$\Leftrightarrow$] \texttt{XOR} (A+(A|\textasciitilde B)) with \textasciitilde(A|B)
+    \end{itemize}
+\end{frame}
+\begin{frame}{Realizing the set operations}
+	\textbf{Binary Search on h-sets:}
+	\begin{itemize}
+		\item Median of h-set $A$, element with rank $\lfloor|A|/2 + 1\rfloor$
+		\item Create look-up table for each h-set in $\mathcal{O}(n)$ time
+		\item Continue on left/right branch with $\{i \in A \ | \ i < j\}$ or $\{i \in A  \ | \ i \ge j\}$ operation
+	\end{itemize}
 \end{frame}
 \end{document}
 

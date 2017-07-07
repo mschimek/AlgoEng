@@ -1,0 +1,82 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+%\usetikzlibrary{...}% tikz package already loaded by 'tikz' option
+\tikzset{big node/.style={circle,fill=white,draw,inner sep=2pt,minimum size=0.5cm}}
+\tikzset{little node/.style={circle,fill=white,draw,inner sep=1pt,minimum size=0.3cm}}
+\tikzset{inv node/.style={circle,fill=white,draw=white,inner sep=2pt,minimum size=0.5cm}}
+\tikzset{del node/.style={circle,fill=white,draw,inner sep=2pt,minimum size=1cm}}
+\tikzset{unimp node/.style={circle,fill=white,draw=black!8,inner sep=2pt,minimum size=0.5cm}}
+\tikzset{bigg node/.style={circle,fill=white,draw,inner sep=2pt,minimum size=0.68cm}}
+
+
+
+% minimum width=3cm, text width=3cm,
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110,  minimum height=1cm, text centered, fill=blue!60, draw, double=blue, double distance =1pt]
+
+\tikzstyle{rounded} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, fill=green!30, draw, double=green, double distance =1pt]
+
+\tikzstyle{manuell} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, fill=red!30,draw, double=red, double distance =1pt]
+
+\tikzstyle{r_box} = [rectangle, minimum width=7cm, minimum height=0.5cm, text width=7cm, text centered, align=center, draw, rounded corners=3pt]
+
+\tikzstyle{r_box_min} = [rectangle, minimum width=3.3cm, minimum height=0.5cm, text width=3.3cm, text centered, align=center, draw, rounded corners=3pt, fill=blue!30]
+
+\usepackage[absolute]{textpos}
+
+\definecolor{LightCyan}{cmyk}{.5,0,.3,0}
+
+\begin{document}
+		\def\y{-0.5 cm}
+		\def\z{-1.6cm}
+		\def\a{-2.8cm}
+		\begin{tikzpicture}[node distance=1.5cm]				
+ 	    			
+ 	    	%root
+ 	    	\draw node (0) [little node, fill=black] {};
+ 	    	%first line
+ 	    	\draw (-3,\y) node (1) [little node] {}; 
+ 	    	\draw (3, \y) node (2) [little node] {};
+ 	    	\draw[color = blue] (0) -- (1) node [sloped,above, pos=0.5] {3};
+ 	    	\draw (0) -- (2) node [sloped,above, pos=0.5] {11};
+ 	    	%second line
+ 	    	\draw (-4.5,\z) node (3) [little node] {};
+ 	    	\draw (-3.2,\z) node (4) [little node] {};
+ 	    	\draw (-1.9,\z) node (5) [little node] {};
+ 	    	\draw (1.9,\z) node (6) [little node] {};
+ 	    	\draw (4.5,\z) node (7) [little node] {};
+ 	    	\draw (1) -- (3) node [sloped,above, pos=0.5] {1};
+ 	    	\draw (1) -- (4) node [sloped,above, pos=0.5] {5};
+ 	    	\draw[color=blue] (1) -- (5) node [sloped,above, pos=0.5] {16};
+ 	    	\draw (2) -- (6) node [sloped,above, pos=0.5] {7};
+ 	    	\draw (2) -- (7) node [sloped,above, pos=0.5] {4};
+ 	    	%third line
+ 	    	\draw (-6.0,\a) node (8) [little node] {};
+ 	    	\draw (-4.8,\a) node (9) [little node] {};
+ 	    	\draw (-3.8,\a) node (10) [little node] {};
+ 	    	\draw (-3.0,\a) node (11) [little node] {};
+ 	    	\draw (-2.0,\a) node (12) [little node] {};
+ 	    	\draw (-1.0,\a) node (13) [little node] {};
+ 	    	\draw (1.0,\a) node (14) [little node] {};
+ 	    	\draw (2.0,\a) node (15) [little node] {};
+ 	    	\draw (3.0,\a) node (16) [little node] {};
+ 	    	\draw (4.0,\a) node (17) [little node] {};
+ 	    	\draw (4.9,\a) node (18) [little node] {};
+ 	    	\draw (17) +(200:0.5) node  {};
+ 	    	
+ 	    	\draw (3) -- (8) node [sloped,above, pos=0.5] {6};
+ 	    	\draw (3) -- (9) node [sloped,above, pos=0.5] {7};
+ 	    	\draw (4) -- (10) node [sloped,above, pos=0.5] {1};
+ 	    	\draw (4) -- (11) node [sloped,above, pos=0.5] {2};
+ 	    	\draw (5) -- (12) node [sloped,above, pos=0.5] {8};
+ 	    	\draw[color=blue] (5) -- (13) node [sloped,above, pos=0.5] {6};
+ 	    	
+ 	    	\draw (6) -- (14) node [sloped,above, pos=0.5] {6};
+ 	    	\draw (6) -- (15) node [sloped,above, pos=0.5] {4};
+ 	    	\draw (6) -- (16) node [sloped,above, pos=0.5] {1};
+ 	    	\draw (7) -- (17) node [sloped,above, pos=0.5] {3};
+ 	    	\draw (7) -- (18) node [sloped,above, pos=0.5] {7};
+ 	    	
+ 	    	\draw (0) +(155:0.5cm) node (u) {u};
+ 	    	\draw (13) +(10:0.5cm) node (v) {v};
+		\end{tikzpicture}
+		
+\end{document}
