@@ -273,7 +273,7 @@
 			\item {\color{blue}Full branching tree} $T$ with real edge weights
 			\item list of pairs of distinct vertices $(u,v)$, \ $u$ is ancestor of $v$
 		\end{itemize}
-		Determine for each pair ($u,v$) of the list  heaviest edge on $(u,v)$-path in $T$.
+		Determine for each pair ($u,v$) a heaviest edge on $(u,v)$-path in $T$.
 	\end{block}
 	\pause
 	\begin{figure}
@@ -435,11 +435,11 @@
 	\begin{itemize}
 		\item Graph $G=(V,E)$ and spanning tree $T$
 		\item Is $T$ a MST? 
-		\item [$\Leftrightarrow$] Check all non-tree edges $\{u,v\}$ against heaviest edge on $(u,v)$-path
+		\item [$\Leftrightarrow$] Check all non-tree edges $\{u,v\}$ against a heaviest edge on $(u,v)$-path
 		
 		\bigskip
 		\pause
-		\item [$\Rightarrow$] Reduce to TPM-Problem with 
+		\item [$\Rightarrow$] Reduces to TPM-Problem with 
 		\begin{itemize}
 			\item tree $T$
 			\item List $L$ of queries $(u_i,v_i)$ and $|L| \le m$
@@ -474,7 +474,7 @@
 	 	\item full-branching tree $T$
 	 	\item List of $m$ monotone paths $(u_i,v_i)$
 	 \end{itemize}
- 	Determine heaviest edge on each given path.
+ 	Determine a heaviest edge on each given path.
 	\end{block}
 	\bigskip
 	\pause
@@ -1131,9 +1131,9 @@
             	\onslide<10-11>
             	$\forall w \in T$
             	\begin{itemize}
-           		\item $M_w$ set of depth of suffix weight maxima on $(r,v)$-path:
+           		\item $M_w$ set of depth of suffix weight maxima on $(r,w)$-path:
            		\[
-           		M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_v(j)) > \omega(P_v(k)), k = j+1, \dots, d(w)\}
+           		M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_w(j)) > \omega(P_w(k)), k = j+1, \dots, d(w)\}
            		\]
            		\end{itemize}
            	    \onslide<12>
@@ -1146,7 +1146,7 @@
                 $\forall w \in T$
                 \begin{itemize}
                 	\item Not known to compute $M_w$ efficiently
-                	\item Calculate $S_w = D_v \downarrow M_v$ instead \ \ \ ({\footnotesize since $\{d(v_i)\} \downarrow S_{v_i} = \{d(v{_i})\} \downarrow M_{v_i}$})
+                	\item Calculate $S_w = D_w \downarrow M_w$ instead \ \ \ ({\footnotesize since $\{d(v_i)\} \downarrow S_{v_i} = \{d(v{_i})\} \downarrow M_{v_i}$})
                 \end{itemize}
             	 \onslide<14>
             	$\forall w \in T$
@@ -1164,7 +1164,7 @@
     	\begin{itemize}
     		\item Calculate $L_w$   \ \ ($\color{blue}\mathcal{O}(1)$)
     		\item Calculate $D_w$ bottom-up \ \ ($\color{blue}\mathcal{O}(1)$
-    		\item Calculate $S_w = D_w \downarrow M_v$ top-down  \ \ ($\color{blue}\mathcal{O}(\log|D_w| + 1)$)
+    		\item Calculate $S_w = D_w \downarrow M_w$ top-down  \ \ ($\color{blue}\mathcal{O}(\log|D_w| + 1)$)
     		\item Calculate for each $i \in L_w$: \\
     			  $\{d(u_i)\} \downarrow S_w$ \ \ ($\color{blue} \mathcal{O}(|L_w|)$)
     		
@@ -1270,10 +1270,10 @@
 		\bigskip
 		\item $T$ is a full-branching tree $\Rightarrow$ $h \le \log n$. 
 		\bigskip
-		\item Assuming that machine word has $\color{blue} \log n$ bits: \\
-			  represent h-set $A$ as Integer $I$
+		\item Assuming that a machine word has $\color{blue} \log n$ bits: \\
+			  h-set $A$ can be represented as Integer $I$
 			  \[ I = \sum_{i\in A} 2^i \]
-		\item Try to realize set operations via bitwise operations
+		\item Try to realize set operations with bitwise, boolean operations
 		
 	\end{itemize}
 \end{frame}
@@ -1304,16 +1304,16 @@
  	\pause
     'Receiving' positions:
     \begin{itemize}
-    	\item if \texttt{A}$[i] = $\ \texttt{(A|\textasciitilde B)}$[i]$ \ then \ \ \texttt{(A+(A|\textasciitilde B)}$[i] = 1$
-    	\item if \texttt{A}$[i] \neq$ \texttt{(A|\textasciitilde B)}$[i]$ \ then \ \ \texttt{(A+(A|\textasciitilde B)}$[i] = 0$
+    	\item Case \texttt{A}$[i] = $\ \texttt{(A|\textasciitilde B)}$[i]$: \ \ \ '$i$ receiving pos' $\Leftrightarrow$ \texttt{(A+(A|\textasciitilde B)}$[i] = 1$
+    	\item Case \texttt{A}$[i] \neq$ \texttt{(A|\textasciitilde B)}$[i]$: \ \ \ '$i$ receiving pos' $\Leftrightarrow$ \texttt{(A+(A|\textasciitilde B)}$[i] = 0$
     	\item [$\Rightarrow$] \texttt{XOR} (A+(A|\textasciitilde B)) with symmetric set difference of \texttt{(A|\textasciitilde B)} and \texttt{A}
-    	\item [$\Leftrightarrow$] \texttt{XOR} (A+(A|\textasciitilde B)) with \textasciitilde(A|B)
+    	\item [$\Leftrightarrow$] \texttt{XOR} (A+(A|\textasciitilde B)) with \texttt{\textasciitilde(A|B)}
     \end{itemize}
 \end{frame}
 \begin{frame}{Realizing the set operations}
 	\textbf{Binary Search on h-sets:}
 	\begin{itemize}
-		\item Median of h-set $A$, element with rank $\lfloor|A|/2 + 1\rfloor$
+		\item Median of h-set $A$:  element with rank $\lfloor|A|/2 + 1\rfloor$
 		\item Create look-up table for each h-set in $\mathcal{O}(n)$ time
 		\item Continue on left/right branch with $\{i \in A \ | \ i < j\}$ or $\{i \in A  \ | \ i \ge j\}$ operation
 	\end{itemize}
