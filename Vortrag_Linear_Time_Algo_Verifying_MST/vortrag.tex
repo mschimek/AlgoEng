@@ -196,9 +196,8 @@
 		 $\omega(\{u,v\}) \ge \max(\omega(e_1),\dots,\omega(e_l))$.}
 	\end{block}
 \end{frame}
-\begin{frame}{Tree-Path-Maxima-Problem}
+\begin{frame}{Tree-Path-Maxima-Problem (TPM)}
 	\begin{block}{Tree-Path-Maxima-Problem}
-		\emph{Given:} 
 		\begin{itemize}
 			\item tree $T$ with real edge weights
 			\item list of pairs of distinct vertices $(u,v)$
@@ -266,11 +265,14 @@
  		\end{tikzpicture}
  	\end{figure}
 \end{frame}
-\begin{frame}{Special-Tree-Path-Maxima-Problem (STPM)}
-	\begin{block}{Tree-Path-Maxima-Problem}
-		\emph{Given:} 
+\begin{frame}{Special-Tree-Path-Maxima-Problem}
+	\begin{block}{Special-Tree-Path-Maxima-Problem (STPM)}
 		\begin{itemize}
-			\item {\color{blue}Full branching tree} $T$ with real edge weights
+			\item {\color{blue}Full branching tree} $T$ with real edge weights 
+			\begin{itemize}
+				\item rooted tree, all leaves on same level
+				\item each non-leaf has at least two children
+			\end{itemize}
 			\item list of pairs of distinct vertices $(u,v)$, \ $u$ is ancestor of $v$
 		\end{itemize}
 		Determine for each pair ($u,v$) a heaviest edge on $(u,v)$-path in $T$.
@@ -447,6 +449,7 @@
 	\end{itemize}
 \end{frame}
 \begin{frame}{TPM-Problem $	\rightsquigarrow$ STPM-Problem}
+	\textbf{1. Part}
 	\begin{block}{Full-Branching Tree}
 		Need {\color{blue} full-branching tree} with identical heaviest edge on each $(u_i,v_i)$-path
 	\end{block}
@@ -457,15 +460,113 @@
 			\item in $\mathcal{O}(|T|)$ time
 		\end{itemize}
 	\end{itemize}
-	\bigskip
-	\pause
-	\begin{block}{Monotone path queries}
-		SPTM only allows queries $(u_i,v_i)$ with $u_i$ ancestor of $v_i$.
-	\end{block}
-	\begin{itemize}
+	\begin{figure}
+		\setbeamercovered{invisible}
+		\definecolor{orange}{rgb}{1,0.5,0}
+		\begin{tikzpicture}
+			\def\h{-1cm}
+			\def\x{1cm}
+			\onslide<2->
+				\draw node (d) [little node] {\footnotesize d};
+				\draw (d) +(-1.2cm,\h) node (c) [little node] {\footnotesize c};
+				\draw (c) +(-1cm,\h) node (a) [little node] {\footnotesize a};
+				\draw (c) +(+1cm,\h) node (b) [little node] {\footnotesize b};
+				\draw (d) +(+1cm,\h) node (e) [little node] {\footnotesize e};
+				\draw (e) +(1cm,\h) node (f) [little node] {\footnotesize f};
+				\draw (d) -- (c) node [sloped,above,pos=0.5] {1};
+				\draw (c) -- (b) node [sloped,above,pos=0.5] {4};
+				\draw (c) -- (a) node [sloped,above,pos=0.5] {3};
+				\draw (d) -- (e) node [sloped,above,pos=0.5] {2};
+				\draw (e) -- (f) node [sloped,above,pos=0.5] {1};
+				
+			\onslide<3->
+				\draw (f) + (1cm,0cm) node (baseline) {};
+				\draw (baseline) ++(\x,0cm) node (1) [little node] {\footnotesize a};
+				\draw (1) +(\x,0cm) node (2) [little node] {\footnotesize b};
+				\draw (2) +(\x,0cm) node (3) [little node] {\footnotesize c};
+				\draw (3) +(\x,0cm) node (4) [little node] {\footnotesize d};
+				\draw (4) +(\x,0cm) node (5) [little node] {\footnotesize e};
+				\draw (5) +(\x,0cm) node (6) [little node] {\footnotesize f};
+			\onslide<4->
+				\draw (c) +(-1cm,\h) node (a) [little node, fill=blue] {\footnotesize a};
+				\draw (c) -- (a) node [sloped,above,pos=0.5, color=blue] {3};
+			\onslide<5->
+				\draw (c) +(+1cm,\h) node (b) [little node,fill=blue] {\footnotesize b};
+				\draw (c) -- (b) node [sloped,above,pos=0.5,color=blue] {4};
+			\onslide<6->
+				\draw (d) +(-1.2cm,\h) node (c) [little node,fill=blue] {\footnotesize c};
+				\draw (d) -- (c) node [sloped,above,pos=0.5,color=blue] {1};
+			\onslide<7->	
+				\draw node (d) [little node, fill=blue] {\footnotesize d};
+			\onslide<8->	
+				\draw (e) -- (f) node [sloped,above,pos=0.5,color=red] {1};
+				\draw (e) +(1cm,\h) node (f) [little node,fill=red] {\footnotesize f};
+			\onslide<9->
+			    \draw (d) +(+1cm,\h) node (e) [little node,fill=red] {\footnotesize e};
+			\onslide<10->
+				\draw (1) +(1cm,-\h) node (t1) [little node, fill=blue] {\footnotesize $t_1$};
+				\draw (1) -- (t1) node [sloped,above,pos=0.5] {3};
+				\draw (2) -- (t1) node [sloped,above,pos=0.5] {4};
+				\draw (3) -- (t1) node [sloped,above,pos=0.2] {1};
+				\draw (4) -- (t1) node [sloped,above,pos=0.5] {1};
+			\onslide<11->
+				\draw (5) +(0.5cm,-\h) node (t2) [little node, fill=red] {\footnotesize $t_2$};
+				\draw (5) -- (t2) node [sloped,above,pos=0.5] {1};
+				\draw (6) -- (t2) node [sloped,above,pos=0.5] {1};
+			\onslide<12->
+				\draw (d) -- (e) node [sloped,above,pos=0.5,color=orange] {2};
+			\onslide<13->
+				\draw (4) +(0cm,2cm) node (t3) [little node, fill=orange] {\footnotesize $t_3$};
+				\draw (t3) -- (t1) node [sloped,above,pos=0.5] {2};
+				\draw (t2) -- (t3) node [sloped,above,pos=0.5] {2};
+		\end{tikzpicture}
+	\end{figure}
+
+	
+\end{frame}
+\begin{frame}{TPM-Problem $	\rightsquigarrow$ STPM-Problem}
+\textbf{2. Part}
+\begin{block}{Monotone path queries}
+	SPTM only allows queries $(u_i,v_i)$ with $u_i$ ancestor of $v_i$.
+\end{block}
+\begin{itemize}
 	\item Split up $(u_i,v_i)$-path into 2 monotone path $(u_i,z), (z, v_i)$,  \\ $z = \textup{{\color{blue}L}owest{\color{blue}C}ommon{\color{blue}A}ncestor}(u_i,v_i)$
 	\item $LCA(u_i,v_i)$: $\mathcal{O}(|T|)$ preprocessing time, query in constant time
-	\end{itemize}
+\end{itemize}
+\begin{figure}
+	\setbeamercovered{invisible}
+	\begin{tikzpicture}
+	\def\h{-1cm}
+	\def\x{1cm}
+	\onslide<2->
+		\draw node (d) [little node] {};
+		\draw (d) +(-1.2cm,\h) node (c) [little node] {};
+		\draw (c) +(-1cm,\h) node (a) [little node] {};
+		\draw (c) +(+1cm,\h) node (b) [little node] {};
+		\draw (d) +(+1cm,\h) node (e) [little node] {};
+		\draw (e) +(1cm,\h) node (f) [little node] {};
+		\draw (d) -- (c) node [sloped,above,pos=0.5] {1};
+		\draw (c) -- (b) node [sloped,above,pos=0.5] {4};
+		\draw (c) -- (a) node [sloped,above,pos=0.5] {3};
+		\draw (d) -- (e) node [sloped,above,pos=0.5] {2};
+		\draw (e) -- (f) node [sloped,above,pos=0.5] {1};
+		\draw (b) +(45:0.5cm) node {$u_i$};
+		\draw (f) +(45:0.5cm) node {$v_i$};
+	\onslide<3>
+		\draw[ultra thick] (d) -- (c) node [sloped,above,pos=0.5] {1};
+		\draw[ultra thick] (c) -- (b) node [sloped,above,pos=0.5] {4};
+		\draw (c) -- (a) node [sloped,above,pos=0.5] {3};
+		\draw[ultra thick] (d) -- (e) node [sloped,above,pos=0.5] {2};
+		\draw[ultra thick] (e) -- (f) node [sloped,above,pos=0.5] {1};
+	\onslide<4->
+		\draw[thick,color = blue] (d) -- (c) node [sloped,above,pos=0.5] {1};
+		\draw[thick, color = blue] (c) -- (b) node [sloped,above,pos=0.5] {4};
+		\draw (c) -- (a) node [sloped,above,pos=0.5] {3};
+		\draw[thick, color = red] (d) -- (e) node [sloped,above,pos=0.5] {2};
+		\draw[thick, color = red] (e) -- (f) node [sloped,above,pos=0.5] {1};
+		\draw (d) +(45:0.5cm) node {$z$};
+	\end{tikzpicture}
+\end{figure}
 \end{frame}
 \begin{frame}{Algorithm for solving STPM}
 
