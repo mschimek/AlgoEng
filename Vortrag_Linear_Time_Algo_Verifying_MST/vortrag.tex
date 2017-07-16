@@ -184,7 +184,12 @@
 
 \begin{frame}{MST-Verification}
 	\begin{block}{MST-Verification}
-	\emph{Given:} undirected Graph $G=(V,E)$, edge weights $\omega: E \rightarrow \mathbb{R}$ and spanning tree $T$ of $G$.
+	\emph{Given:} 
+	\begin{itemize}
+		\item undirected Graph $G=(V,E)$
+		\item edge weights $\omega: E \rightarrow \mathbb{R}$
+		\item spanning tree $T$ of $G$.
+	\end{itemize}
 	\emph{Decide} whether $T$ is a MST of $G$.
 	\end{block}
 	\bigskip
@@ -449,7 +454,7 @@
 	\end{itemize}
 \end{frame}
 \begin{frame}{TPM-Problem $	\rightsquigarrow$ STPM-Problem}
-	\textbf{1. Part}
+	\textbf{Part 1}
 	\begin{block}{Full-Branching Tree}
 		Need {\color{blue} full-branching tree} with identical heaviest edge on each $(u_i,v_i)$-path
 	\end{block}
@@ -525,7 +530,7 @@
 	
 \end{frame}
 \begin{frame}{TPM-Problem $	\rightsquigarrow$ STPM-Problem}
-\textbf{2. Part}
+\textbf{Part 2}
 \begin{block}{Monotone path queries}
 	SPTM only allows queries $(u_i,v_i)$ with $u_i$ ancestor of $v_i$.
 \end{block}
@@ -582,7 +587,6 @@
 	\begin{overprint}
 		\onslide<1-2>
 	\begin{itemize}
-	\item  Several sets of vertices calculated by traversing $T$
 	\item  Algorithm uses special {\color{blue}set operator} $\downarrow$:
 	\[
 		A \downarrow B := \{ b \in B \ | \ \exists a \in A: a < b \textup{ and no } b'\in B \textup{ with } a < b' < b \} 
@@ -591,7 +595,6 @@
 	\end{itemize}
 	\onslide<3>
 	\begin{itemize}
-		\item  Several sets of vertices calculated by traversing $T$
 		\item  Algorithm uses special {\color{blue}set operator} $\downarrow$:
 		\[
 		A \downarrow B := \{ b \in B \ | \ \exists a \in A: a < b \textup{ and no } b'\in B \textup{ with } a < b' < b \} 
@@ -601,6 +604,7 @@
 	\end{overprint}
 \end{frame}
 \begin{frame}
+	\setbeamercovered{invisible}
 	\begin{figure}
 		\centering
 		\def\a{-0.5 cm}
@@ -621,7 +625,7 @@
 			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
 			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
 			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
-			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node]  {};
 			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
 			
 			\draw (0) +(2cm,\h) node (8) [little node] {};
@@ -717,7 +721,7 @@
 			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
 			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
 			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
-			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node]  {};
 			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
 			
 			\draw (0) +(2cm,\h) node (8) [little node] {};
@@ -812,7 +816,7 @@
 			\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
 			\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
 			\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
-			\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+			\draw (5) ++(-0.5cm,\h) node (6) [little node]  {};
 			\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
 			
 			\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
@@ -892,7 +896,7 @@
 	    	\draw (2) ++(-0.8cm,\h) node (3) [little node]  {};
 	    	\draw (3) ++(-0.7cm,\h) node (4) [little node]  {};
 	    	\draw (4) ++(-0.6cm,\h) node (5) [little node]  {};
-	    	\draw (5) ++(-0.5cm,\h) node (6) [little node, fill=red, opacity=.5]  {};
+	    	\draw (5) ++(-0.5cm,\h) node (6) [little node]  {};
 	    	\draw (6) ++(-0.4cm,\h) node (7) [little node]  {};
 	    	
 	    	\draw[opacity=0] (0) +(2cm,\h) node (8) [little node] {};
@@ -962,7 +966,7 @@
 	    	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.45,opacity=0,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\},M = \{3,7\}$}};
 	    	
 	    }
-        \only<6-7> {
+        \only<7-8> {
         	%root
         	\draw node (base) {};
         	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
@@ -1044,7 +1048,7 @@
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}$}};
         	
         }
-        \only<8-9> {
+        \only<9-10> {
         	%root
         	\draw node (base) {};
         	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
@@ -1126,7 +1130,7 @@
         	\draw [dashed, color=gray, opacity=0] (6r) -- (6) node  [sloped,pos=0.6,opacity=1,color=black] {{\footnotesize$L = \{1,2\}, D = \{1,3\}$}};
         	
         }
-        \only<10-> {
+        \only<11-> {
         	%root
         	\draw node (base) {};
         	\draw  (base)  ++(-5cm,0cm) node (0) [little node, fill=black] {};
@@ -1214,42 +1218,69 @@
 	\end{figure}
 
             \begin{overprint}
-            	\onslide<5-6>
+            	\onslide<1>
+            	\begin{itemize}
+            		\item {\color{blue} Full-branching} tree $T$
+            	\end{itemize}
+            	\onslide<2>
+            	\begin{itemize}
+            		\item {\color{blue} Full-branching} tree $T$
+            		\item monotone path queries: {\color{blue} $(u_1,v_1), (u_2, v_2)$} and {\color{blue} $(u_3, v_3)$}
+            	\end{itemize}
+	            \onslide<3-4>
+	            \begin{itemize}
+	            	\item {\color{blue} Full-branching} tree $T$
+	            	\item monotone path queries: {\color{blue} $(u_1,v_1), (u_2, v_2)$} and {\color{blue} $(u_3, v_3)$}
+	            	\item ommit unneeded vertices
+	            \end{itemize}
+            	\onslide<5>
+            	For every vertex $w \in T$: 
+            	\begin{itemize}
+            		\item calculate following sets by several traversals of $T$:
+            			\begin{itemize}
+            				\item $L_w$
+            				\item $D_w$
+            				\item $M_w$
+            			\end{itemize}
+            	
+            	\end{itemize}
+            	\onslide<6-7>
             	$\forall w \in T$
             	\begin{itemize}
-            	\item $L_w = \{\textup{vertices }u_i \textup{ for which } v_i = w\}$
+            	\item $L_w = \{\textup{indice } i \textup{ for which } v_i = w\}$
             	\end{itemize}
-            	\onslide<7-8>
+            	\onslide<8-9>
            		 $\forall w \in T$
            		 \begin{itemize}
-            		\item $D_w = \{d(u_i) | u_i \textup{ is ancestor, } v_i \textup{ descendant of } w\}$
+            		\item $D_w = \{\textup{depth}(u_i) | u_i \textup{ is ancestor, } v_i \textup{ descendant of } w\}$
+            		\item {\color{blue} depth} of startpoints above $w$, whose query path contains $w$
             	\end{itemize}
-                \onslide<9>
+                \onslide<10>
                 $\forall w \in T$
                 \begin{itemize}
-                	\item \[D_w = \{d(u_i) \ | v_i = w\} \cup \bigcup_{i \textup{ child of } w } D_i \setminus \{d(w)\}\]
+                	\item \[D_w = \{\textup{depth}(u_i) \ | v_i = w\} \cup \bigcup_{i \textup{ child of } w } D_i \setminus \{\textup{depth}(w)\}\]
                 \end{itemize}
-            	\onslide<10-11>
+            	\onslide<11-12>
             	$\forall w \in T$
             	\begin{itemize}
-           		\item $M_w$ set of depth of suffix weight maxima on $(r,w)$-path:
+           		\item $M_w$ set of depth of suffix weight maxima on $(\textup{root},w)$-path:
            		\[
            		M_w = \{j | 1 \le j \le d(w) \textup{ and } \omega(P_w(j)) > \omega(P_w(k)), k = j+1, \dots, d(w)\}
            		\]
            		\end{itemize}
-           	    \onslide<12>
+           	    \onslide<13>
            	    $\forall w \in T$
            	    \begin{itemize}
-           	    	\item $M_w$ set of depth of suffix weight maxima on $(root,w)$-path:
+           	    	\item $M_w$ set of depth of suffix weight maxima on $(\textup{root},w)$-path:
            	    	\item [] \ \ $\Rightarrow$ $\color{blue}\{d(v_i)\} \downarrow M_{v_i}$ \ : index of heaviest edge on path
            	    \end{itemize}
-                \onslide<13>
+                \onslide<14>
                 $\forall w \in T$
                 \begin{itemize}
                 	\item Not known to compute $M_w$ efficiently
                 	\item Calculate $S_w = D_w \downarrow M_w$ instead \ \ \ ({\footnotesize since $\{d(v_i)\} \downarrow S_{v_i} = \{d(v{_i})\} \downarrow M_{v_i}$})
                 \end{itemize}
-            	 \onslide<14>
+            	 \onslide<15>
             	$\forall w \in T$
             	\begin{itemize}
             		\item $S_{root} = \emptyset$ and for $z$ ancestor of $w$:
